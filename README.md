@@ -7,7 +7,7 @@ contra su competencia directa, usando NLP para extraer sentimiento y temas clave
 ## Estado del proyecto
 - Fase 1: Recolección de datos
 - Fase 2: Limpieza de datos
-🚧 En desarrollo Fase 3: Análisis de sentimiento
+- 🚧 En desarrollo Fase 3: Análisis de sentimiento
 
 ## Stack
 - Python (Pandas, pysentimiento)
