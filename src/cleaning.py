@@ -1,30 +1,67 @@
-# Imports
-from pathlib import Path
-import pandas as pd 
-import numpy as np
+"""
+cleaning.py
+Carga los CSV crudos de Apify (data/raw), los unifica, limpia el texto, 
+detecta idioma y exporta dos datasets a data/processed/:
+    - reviews_all.csv           -> todas las reseñas (con y sin texto), para métricas generales.
+    - reviews_with_text.csv     -> solo reseñas con texto, limpias y con idiomas detectado. 
+Correr directo con: python src/cleaning.py
+"""
+
 import re 
 import unicodedata
+from pathlib import Path
+import pandas as pd 
 from langdetect import detect, LangDetectException
-import glob
-import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Función para limpieza de texto para la detección de idioma
+# -- Decisiones metodológicas del proyecto (documentadas explicitamente)--
+
+# Debajo de este número de caracteres, langdetect no es confiable
+# (textos cortos suelen clasificarse mal como rumano, catalán, etc.)
+
+LONGITUD_MINIMA_DETECCION_IDIOMA = 20
+
+# El scraping trajo reseñas desde 2011, pero el volumne de esos años muy
+# antiguos es bajo y poco representativo del negocio actual. Se acota el 
+# análisis a 2020-2026 para reflejar la experiencia reciente del cliente. 
+
+AÑO_MINIMO = 2020
+ 
+COLUMNAS_UTILES = [
+    'text', 'stars', 'publishedAtDate', 'title',
+    'reviewDetailedRating/Comida', 'reviewDetailedRating/Servicio', 
+    'reviewDetailedRating/Ambiente', 'reviewContext/Tiempo de espera',
+    'likesCount', 'reviewerNumberOfReviews', 'isLocalGuide'
+]
+
+
+RENOMBRES_COLUMNAS = {
+    'title': 'restaurante',
+    'text': 'review_texto',
+    'publishedAtDate' : 'fecha',
+    'stars': 'rating',
+    'reviewDetailedRating/Comida':'rating_comida',
+    'reviewDetailedRating/Servicio':'rating_servicio',
+    'reviewDetailedRating/Ambiente':'rating_ambiente',
+    'reviewContext/Tiempo de espera':'tiempo_espera_reportado',
+}
+
 def limpiar_texto(texto): 
+    """Normaliza unicode y espacios. NO quita tildes ni pasa a minúsculas:
+    pysentimiento funciona mejor con el texto en su forma natural."""
+    
     if pd.isna(texto): 
         return texto
-    # Normalizar unicode 
     texto = unicodedata.normalize('NFC', str(texto))
-    # Quitar salto de líneas mútlipes y espaciados extras
     texto = re.sub(r'\s+',' ',texto)
-    # Quitar espacioes al inicio/final
-    texto = texto.strip()
-    return texto
+    return texto.strip()
 
-# Función de detección de idioma
-def detectar_idioma(texto): 
-    if pd.isna(texto) or len(texto.strip()) < 20: 
+def detectar_idioma(texto:str)->str:
+    """Detecta idioma con manejo de errores. Textos muy cortos se asumen
+    español: es la asunción más razonable dado el contexto (reseñas en
+    Guayaquil) y langdetect no es confiable en textos breves.""" 
+    if pd.isna(texto) or len(str(texto).strip()) < LONGITUD_MINIMA_DETECCION_IDIOMA: 
         return 'es'
     try: 
         return detect(texto)
@@ -33,22 +70,17 @@ def detectar_idioma(texto):
     
     
 # Función para limpiar el  dataFrame
-def limpiar_df(df): 
-    # Cambio de nombre a columnas
-    df = df.rename(columns={
-        'title': 'restaurante',
-        'text': 'review_texto',
-        'publishedAtDate' : 'fecha',
-        'stars': 'rating',
-        'reviewDetailedRating/Comida':'rating_comida',
-        'reviewDetailedRating/Servicio':'rating_servicio',
-        'reviewDetailedRating/Ambiente':'rating_ambiente',
-        'reviewContext/Tiempo de espera':'tiempo_espera_reportado',
-    })
-    
+def limpiar_df(df: pd.DataFrame):
+    """Renombra columnas, filtra por fecha, separa reseñas con/sin texto, 
+    limpia el texto y detecta idioma. Retorna (df_completo, df_texto).""" 
     # Convertir fecha  filtrar desde 2020
+    df = df.rename(columns=RENOMBRES_COLUMNAS)
+    
     df['fecha'] = pd.to_datetime(df['fecha'], errors='coerce')
-    df = df[df['fecha'].dt.year >=2020].copy()
+    n_antes_filtro_fecha = len(df)
+    df = df[df['fecha'].dt.year >= AÑO_MINIMO].copy()
+    print(f'Filtro de fecha (>= {AÑO_MINIMO}): {n_antes_filtro_fecha} ->  {len(df)} reseñas '
+          f'{n_antes_filtro_fecha - len(df)} descartadas por ser anteriores a {AÑO_MINIMO}')
     
     # Marcar las reseñas que tienen texto
     df['tiene_texto'] = df['review_texto'].notna() & (df['review_texto'].astype(str).str.strip() != '')
@@ -57,27 +89,21 @@ def limpiar_df(df):
     df_completo = df.copy()
     df_texto = df[df['tiene_texto']].copy()
         
+        
     # Aplicar limpieza de texto  y detección de idioma
     df_texto['text_limpio'] =df_texto['review_texto'].apply(limpiar_texto)
-    
     df_texto['idioma_detectado'] = df_texto['text_limpio'].apply(detectar_idioma)
-    
-    
     
     return df_completo, df_texto
     
 
 
 
-
-
 def cargar_datos():  
-    '''Función principal: cargar, limpiar y exportar datos'''
+    '''Función principal: carga todos los CSV de data/raw, limpia y exporta a data/processed'''
 
-    # === SESION 1 : CARGA DE DATOS ============================================
-    # Ruta 
+    # === 1. CARGA DE DATOS ===
     carpeta = BASE_DIR/'data'/'raw'
-    
     archivos = list(carpeta.glob('*.csv'))
     if not archivos: 
         raise FileNotFoundError(f'No se encontraron archivos CSV en {carpeta}')
@@ -85,39 +111,38 @@ def cargar_datos():
     print('⏳ Buscando archivos..')
     print(f'⚙️  Archivos encontrados: {len(archivos)}')    
     
-    # Columnas a utilizar 
-    columnas_utiles = [
-    'text', 'stars', 'publishedAtDate', 'title',
-    'reviewDetailedRating/Comida', 'reviewDetailedRating/Servicio', 
-    'reviewDetailedRating/Ambiente', 'reviewContext/Tiempo de espera',
-    'likesCount', 'reviewerNumberOfReviews', 'isLocalGuide'
-    ]
-    
     dfs = []
     for p in archivos: 
         try: 
-            dfs.append(pd.read_csv(p, usecols=columnas_utiles))
+            dfs.append(pd.read_csv(p, usecols=RENOMBRES_COLUMNAS))
         except Exception as e: 
-            print(f'Error leyendo {p}: {e}')
-    if dfs: 
-        df =pd.concat(dfs, ignore_index=True ) 
-    else: 
-        print('No se pudo leer ningún archivo')
-        df = pd.DataFrame()
+            print(f'Error leyendo {p.name}: {e} -- archivo omitido')
+    if not dfs: 
+        raise RuntimeError("No se pudo leer ningún archivo CSV válido")
         
+    df = pd.concat(dfs, ignore_index=True)
     print(f'Total de reseñas combianadas: {len(df)}')
     
-    # === SESION 2: LIMPIEZA Y EXPORTAR DATOS ============================================
-    print('⏳ Limpieza de datos...')
+    # -- Validación: confirmar que no se perdió ningún restaurante silenciosamente
+    n_restaurantes_cargados = df['title'].nunique() if 'title' in df.columns else None
+    if len(dfs) != len(archivos):
+        print(f'⚠️ ATENCIÓN: se leyeron {len(dfs)} de {len(archivos)} archivos.'
+              f'Revisa los errores de arriba (posibles columnas faltantes en algún CSV)')
     
-    # Desempaquetamos los dos DataFrames que retorna limpiar_df
+    # === 2. LIMPIEZA ===
+    print('⏳ Limpieza de datos...') 
     df_completo, df_texto = limpiar_df(df)
     
-    # Definir ruta 
+    n_restaurantes_finales = df_completo['restaurante'].nunique()
+    print(f'✅ Restaurantes en el dataset final: {n_restaurantes_finales}')
+    if n_restaurantes_cargados is not None and n_restaurantes_finales != n_restaurantes_cargados: 
+        print(f'⚠️ ATENCIÓN: había {n_restaurantes_cargados} restaurantes antes de limpiar'
+              f'y quedaron {n_restaurantes_finales}. Verifica si el filtro de fecha elimminó'
+              f'algún restaurante por completo.')
+    
+    # === 3. EXPORTAR ===
     carpeta_salida = BASE_DIR/'data'/'processed'
-    carpeta_salida.mkdir(
-        parents=True, exist_ok=True
-    ) # Crea la capeta si no existe
+    carpeta_salida.mkdir( parents=True, exist_ok=True) # Crea la capeta si no existe
     
     ruta_df_completo = carpeta_salida / "reviews_all.csv"
     ruta_df_texto = carpeta_salida / "reviews_with_text.csv"
@@ -127,10 +152,11 @@ def cargar_datos():
     df_completo.to_csv(ruta_df_completo, index=False, encoding="utf-8-sig")
     df_texto.to_csv(ruta_df_texto, index=False, encoding="utf-8-sig")
     
-    print(f'Archivo reviews_all guardado en:  {ruta_df_completo}')
-    print(f'Archivo reviews_with_text guardado en {ruta_df_texto} ')
+    print(f'📁 Archivo reviews_all guardado en:  {ruta_df_completo}')
+    print(f'📁 Archivo reviews_with_text guardado en {ruta_df_texto} ')
+    print(f'  Con texto: {len(df_texto)} / {len(df_completo)} '
+          f'({len(df_texto) / len(df_completo):.1%})')
 
-    
     return df_completo, df_texto
 
 
