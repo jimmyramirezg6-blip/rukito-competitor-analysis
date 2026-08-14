@@ -5,9 +5,8 @@ Proyecto de **Data Analytics & NLP** para realizar un benchmarking competitivo d
 ---
 
 ## 📊 Vistas del Proyecto
-![Dashboard Overview](https://raw.githubusercontent.com/streamlit/brand/main/logo/streamlit-logo-primary-colorkey.png)
-*(Consejo: Agrega aquí una captura o GIF de tu dashboard terminado)*
-
+![Dashboard Overview](https://rukito-competitor-analysis-dxqme59ou3th94wfwicoba.streamlit.app/)
+![alt text](image.png)
 ---
 
 ## 🚀 Estado del Proyecto
@@ -59,9 +58,8 @@ Proyecto de **Data Analytics & NLP** para realizar un benchmarking competitivo d
 ├── dashboard/
 │   └── app.py            ← tu app de Streamlit (Fase 6)
 │
-├── reports/
-│   ├── figures/           ← gráficos exportados
-│   └── summary/            ← reporte ejecutivo / PDF final
+├── reports/    
+│   └── summary/            ← reporte ejecutivo / README final
 │
 ├── requirements.txt
 ├── README.md
