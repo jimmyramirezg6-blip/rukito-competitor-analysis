@@ -5,7 +5,7 @@ Proyecto de **Data Analytics & NLP** para realizar un benchmarking competitivo d
 ---
 
 ## 📊 Vistas del Proyecto
-![Dashboard Overview](https://rukito-competitor-analysis-dxqme59ou3th94wfwicoba.streamlit.app/)
+🔗 **[Ver Dashboard en vivo](https://rukito-competitor-analysis-dxqme59ou3th94wfwicoba.streamlit.app/)**
 ![alt text](image.png)
 ---
 
