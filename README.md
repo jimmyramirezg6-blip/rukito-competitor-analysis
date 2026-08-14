@@ -37,7 +37,7 @@ Proyecto de **Data Analytics & NLP** para realizar un benchmarking competitivo d
 
 🔴 **Sabor de la comida** | Tercera debilidad, con porcentaje negativo leve, pero con importancia en el análisis | Brecha de -0.01 vs. promedio competencia
 
-🟢 **Tiempo de espera** | Fortaleza relativa: la espera es un problema de **toda la industria** de parrillas en Guayaquil, pero Rukito lo maneja mejor que el promedio, en comparación con los resturantes Casa Resy y Tomahawk | Brecha de +0.52 vs. promedio competencia
+🟢 **Tiempo de espera** | Fortaleza relativa: la espera es un problema de **toda la industria** de parrillas en Guayaquil, pero Rukito lo maneja mejor que el promedio, en comparación con los restaurantes Casa Resy y Tomahawk | Brecha de +0.52 vs. promedio competencia
 
 🟡 **Moro** | Ligeramente por encima del promedio, sin ser una fortaleza dramática | Brecha de +0.32 vs. promedio competencia|
 
