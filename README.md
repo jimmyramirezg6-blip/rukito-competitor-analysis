@@ -29,15 +29,17 @@ Proyecto de **Data Analytics & NLP** para realizar un benchmarking competitivo d
 ## 💡 Principales Hallazgos (Business Insights)
 
 
-🔴 **Ambiente e instalaciones**: Debilidad más marcada. Rukito es el **único** restaurante del grupo con sentimiento neto negativo en este tema | Brecha de -0.11 vs. promedio competencia
+🔴 **Carne** | Debilidad más marcada. Rukito es el tercer restaurante con scrore promedio superado por restaurantes como MoroGrill, Casa Res, etc. | Brecha de -0.11 vs. promedio competencia
 
-🔴 **Atención al servicio** : Segunda debilidad más consistente, con la muestra más grande de todo el análisis | Brecha de -0.01 vs. promedio competencia
+🔴 **Ambiente e instalaciones** | Segunda debilidad más marcada. Rukito ocupa el penúltimo puesto en este tema, siendo uno de los más bajos co un 0.38 con respecto al 0.75 del restaurante que lidera esta categoría. | Brecha de -0.11 vs. promedio competencia
 
-🔴 **Sabor de la comida** : Tercera debilidad, con porcentaje negativo leve, pero con importancia en el análisis | Brecha de -0.01 vs. promedio competencia
+🔴 **Atención al servicio** | Tercera debilidad más consistente, con la muestra más grande de todo el análisis | Brecha de -0.01 vs. promedio competencia
 
-🟢 **Tiempo de espera** : Fortaleza relativa: la espera es un problema de **toda la industria** de parrillas en Guayaquil, pero Rukito lo maneja mejor que el promedio | Brecha de +0.52 vs. promedio competencia
+🔴 **Sabor de la comida** | Tercera debilidad, con porcentaje negativo leve, pero con importancia en el análisis | Brecha de -0.01 vs. promedio competencia
 
-🟡 **Moro** : Ligeramente por encima del promedio, sin ser una fortaleza dramática | Brecha de +0.32 vs. promedio competencia
+🟢 **Tiempo de espera** | Fortaleza relativa: la espera es un problema de **toda la industria** de parrillas en Guayaquil, pero Rukito lo maneja mejor que el promedio, en comparación con los resturantes Casa Resy y Tomahawk | Brecha de +0.52 vs. promedio competencia
+
+🟡 **Moro** | Ligeramente por encima del promedio, sin ser una fortaleza dramática | Brecha de +0.32 vs. promedio competencia|
 
 ---
 
