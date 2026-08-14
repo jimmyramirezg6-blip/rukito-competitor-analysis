@@ -27,10 +27,13 @@ Proyecto de **Data Analytics & NLP** para realizar un benchmarking competitivo d
 ---
 
 ## 💡 Principales Hallazgos (Business Insights)
-* **Posicionamiento Relativo:** Rukito cuenta con una nota promedio de **4.25⭐** (puesto 6/8 en la zona), situándose por encima de la media de la competencia (4.20⭐), pero con una brecha de 0.20⭐ frente al líder (*MoroGrill*).
-* **Fuga de Puntos (Fricción):** El **24% de las reseñas de Rukito son negativas**, duplicando la tasa de fricción de los competidores Top 3.
-* **Ventajas Competitivas:** Rukito supera ampliamente a la competencia en **tiempo de espera (+0.52)**, **abundancia de porciones (+0.38)** y la satisfacción con sus **moros (+0.33)**.
-* **Áreas de Oportunidad:** La principal brecha negativa está en la percepción de la **carne (-0.22)** y el **ambiente (-0.12)**.
+
+
+🔴 **Ambiente e instalaciones**: Debilidad más marcada. Rukito es el **único** restaurante del grupo con sentimiento neto negativo en este tema | Brecha de -0.11 vs. promedio competencia|
+🔴 **Atención al servicio** : Segunda debilidad más consistente, con la muestra más grande de todo el análisis | Brecha de -0.01 vs. promedio competencia|
+🔴 **Sabor de la comida** : Tercera debilidad, con porcentaje negativo leve, pero con importancia en el análisis | Brecha de -0.01 vs. promedio competencia|
+🟢 **Tiempo de espera** : Fortaleza relativa: la espera es un problema de **toda la industria** de parrillas en Guayaquil, pero Rukito lo maneja mejor que el promedio | Brecha de +0.52 vs. promedio competencia|
+🟡 **Moro** : Ligeramente por encima del promedio, sin ser una fortaleza dramática | Brecha de +0.32 vs. promedio competencia|
 
 ---
 
