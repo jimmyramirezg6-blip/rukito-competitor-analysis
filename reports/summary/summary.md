@@ -29,7 +29,9 @@ por (restaurante, tema) para garantizar significancia estadística:
 | 🟢 **Tiempo de espera** | Fortaleza relativa: la espera es un problema de **toda la industria** de parrillas en Guayaquil, pero Rukito lo maneja mejor que el promedio, en comparación con los resturantes Casa Resy y Tomahawk | Brecha de +0.52 vs. promedio competencia|
 | 🟡 **Moro** | Ligeramente por encima del promedio, sin ser una fortaleza dramática | Brecha de +0.32 vs. promedio competencia|
 
+<<<<<<< HEAD
 **Conclusión central**: El desafío de Rukito es doble, enfrenta una debilidad crítica en su oferta central (calidad de la carne, brecha de -0.11) a la par de un déficit de experiencia física en el local (ambiente e instalaciones, brecha de -0.11). Su ventaja competitiva real no reside en la parrilla, sino en su eficiencia operativa (tiempos de espera liderando la zona con +0.52) y la consistencia de su moro (+0.32).
+=======
 
 ## 🛠️ Metodología
 
@@ -75,4 +77,4 @@ Documentadas explícitamente por transparencia analítica:
 - **NLP**: pysentimiento (sentimiento), diccionario de keywords + regex (temas)
 - **Dashboard**: Streamlit, Plotly
 - **Control de versiones**: Git / GitHub
-o
+
